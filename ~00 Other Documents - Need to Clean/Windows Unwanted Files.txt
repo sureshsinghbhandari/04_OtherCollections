@@ -1,0 +1,31 @@
+@ECHO OFF
+PowerShell.exe -Command "Get-AppxPackage | Remove-AppxPackage"
+PAUSE
+PowerShell.exe -Command "Get-AppxPackage -allusers *windowscalculator* | Foreach {Add-AppxPackage -DisableDevelopmentMode -Register “$($_.InstallLocation)\AppXManifest.xml”}"
+PAUSE
+PowerShell.exe -Command "Get-AppxPackage -allusers *windowscalculator* | Foreach {Add-AppxPackage -DisableDevelopmentMode -Register “$($_.InstallLocation)\AppXManifest.xml”}"
+
+
+
+
+/*from my directory*/
+
+Restore all appls0
+Get-AppxPackage -AllUsers| Foreach {Add-AppxPackage -DisableDevelopmentMode -Register “$($_.InstallLocation)\AppXManifest.xml”}
+
+Restore one package
+Get-AppxPackage -allusers *windowscalculator* | Foreach {Add-AppxPackage -DisableDevelopmentMode -Register “$($_.InstallLocation)\AppXManifest.xml”}
+
+
+Uninstall  all 
+Get-AppxPackage | Remove-AppxPackage
+
+
+
+The two below PS commands will remove all apps minus the store and calculator from all profiles:
+Get-AppxPackage -AllUsers | where-object {$_.name –notlike “*store*”} | Remove-AppxPackage
+Get-appxprovisionedpackage –online | where-object {$_.packagename –notlike “*store*”} | Remove-AppxProvisionedPackage -online? 
+Only needs to be run once per machine....
+
+
+https://community.spiceworks.com/topic/1408834-removing-windows-10-apps-gpo

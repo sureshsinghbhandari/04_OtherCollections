@@ -1,0 +1,284 @@
+package com.acc.asessment;
+
+
+
+
+import org.apache.commons.io.FileUtils;
+import java.io.File;
+import java.io.IOException;
+import java.util.concurrent.TimeUnit;
+import org.openqa.selenium.firefox.FirefoxBinary;
+import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.firefox.FirefoxProfile;
+import org.openqa.selenium.support.ui.ExpectedCondition;
+import org.openqa.selenium.support.ui.Wait;
+import org.openqa.selenium.support.ui.WebDriverWait;
+import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.TakesScreenshot;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.testng.annotations.*;
+import jxl.*;
+
+
+
+public class SeleniumAsessment {
+    
+	private static WebDriver driver;
+	int i = 1; //Counter for Screen shot
+	 
+    @BeforeClass
+    
+public void setUp() throws Exception {
+    	
+    	    
+    	File binaryPath=new File("C:\\Users\\Local\\Mozilla Firefox\\firefox.exe");
+		FirefoxBinary ffBinary=new FirefoxBinary(binaryPath);
+		FirefoxProfile ffProfile=new FirefoxProfile();
+		ffProfile.setEnableNativeEvents(true);
+		driver = new FirefoxDriver(ffBinary,ffProfile);
+    	
+    				String baseUrl = "";
+    	
+    	    driver.get(baseUrl);
+            waitForPageToLoad(driver);
+    	
+    	   driver.manage().window().maximize();
+    	screenShot();
+    			
+    	}
+    public void certificateHandler(WebDriver driver){
+		System.out.println("Entered inside the Certificate Error page :");
+    	
+    	/* try {
+ 			Thread.sleep(800);*/
+ 			
+ 			driver.get("javascript:document.getElementById('overridelink').click();");
+ 			
+ 		/*} catch (InterruptedException e) {
+ 			// TODO Auto-generated catch block
+ 			CloseBrowser(driver);
+ 			e.printStackTrace();
+ 		}*/
+    	
+    	 try {
+  			Thread.sleep(4000);
+  			
+  		} catch (InterruptedException e) {
+  			// TODO Auto-generated catch block
+  			e.printStackTrace();
+  		}
+		
+	}
+    
+
+//Function definition to create the data array in memory. Here the data sheet path, sheet name, and table beginning point name has to be updated
+    @DataProvider(name = "DP2")
+    
+public Object[][] createData1() throws Exception{
+		
+    Object[][] retObjArr=getTableArray("C:\\DataFiles\\DataProvider1.xls","TestCode","RegressionTestData1");
+	return(retObjArr);
+    }
+
+    //Function definition drive the test
+    @Test (dataProvider = "DP2")
+
+
+public void testRegression(String property, String xPath, String value, String xpathlocator, String permission, String name) throws Exception
+
+{
+   //for all link's and buttons
+if(property.equalsIgnoreCase("link"))
+			
+		{
+			
+			
+				 waitForPageToLoad(driver);
+				WebElement eLink = null;
+			    try
+			    {
+			    	screenShot();
+			        eLink = driver.findElement(By.xpath(xPath));
+			        waitForPageToLoad(driver);
+			    }
+			    catch(Exception eElementnotFound)
+			    {
+			    	
+			    	System.out.println("The Link specified by the to open Link is not found: " +eElementnotFound);
+			        
+			    }
+			    eLink.click();
+			    waitForPageToLoad(driver);
+				
+			}
+			Thread.sleep(1500);
+			   if(driver.getTitle().equals("Bank of America | Online Banking | SiteKey | SiteKey Challenge Question")){
+		        	System.out.println("Entered inside the site key page :");
+		        	screenShot();
+		        	
+		        	WebElement sitkeyelement=null;
+		        	 waitForPageToLoad(driver);
+					sitkeyelement=driver.findElement(By.id("tlpvt-challenge-answer"));
+		        	 sitkeyelement.sendKeys("1");
+		        	 try {
+		     		waitForPageToLoad(driver);
+		     			sitkeyelement=driver.findElement(By.xpath("//*[@id='VerifyCompForm']/a/span"));
+		     		} catch (Exception e) {
+		     		
+		     			e.printStackTrace();
+		     		}
+		        	sitkeyelement.click();
+		        	
+		        
+		        }
+if(driver.getTitle().equals("Certificate Error: Navigation Blocked")){
+	screenShot();
+         	certificateHandler(driver);
+         }
+			
+		
+// for send the text inside the text boxes
+if(property.equalsIgnoreCase("textbox"))
+{
+		
+	waitForPageToLoad(driver);
+		 WebElement eTextBox = null;
+	        try
+	        {
+	        	
+	            eTextBox = driver.findElement(By.id(xPath));
+	            screenShot();
+	            waitForPageToLoad(driver);
+	            eTextBox.clear();
+	            
+	        
+	        }
+	        catch(Exception eElementnotFound)
+	        {
+	        	
+	            System.out.println("The Textbox specified by the XPath is not found: " + eElementnotFound);
+	            
+	            
+	        }
+	        eTextBox.sendKeys(value);
+	        
+	        waitForPageToLoad(driver);
+		
+	
+	
+}
+if(property.equalsIgnoreCase("pagetitle")){
+	waitForPageToLoad(driver);
+	if(driver.getTitle().equals(value)){
+		System.out.println("Current page Title : "+driver.getTitle());
+		screenShot();
+	}
+}
+if(property.equalsIgnoreCase("footnote")){
+	WebElement footelement=driver.findElement(By.xpath(xPath));
+	waitForPageToLoad(driver);
+	if(footelement.getText().equals(value)){
+		
+		System.out.println("Footnote Text : "+footelement.getText());
+		screenShot();
+	}
+}
+if(property.equalsIgnoreCase("search")){
+	waitForPageToLoad(driver);
+	if(driver.getTitle().equals("Bank of America | Online Banking | Accounts Overview")){
+    	System.out.println("Entered inside the site key page :");
+    	screenShot();
+    	waitForPageToLoad(driver);
+    if(driver.getPageSource().contains(value)){
+    	screenShot();
+    	System.out.println("Search item : " +value);
+    }
+    else
+    	System.out.println("Search Item not found : "+value);
+    	 
+    
+    }
+	
+}
+    	
+    	
+}
+	
+    //Function definition to end the test and free up the memory
+    @AfterClass
+    public void tearDown() throws Exception{
+    	
+       driver.quit();
+    }
+    
+    //Function definition to fetch the data from excel sheet and provide it to the create data function
+    public String[][] getTableArray(String xlFilePath, String sheetName, String tableName) throws Exception{
+        String[][] tabArray=null;
+        
+            Workbook workbook = Workbook.getWorkbook(new File(xlFilePath));
+            Sheet sheet = workbook.getSheet(sheetName);
+            int startRow,startCol, endRow, endCol,ci,cj;
+            Cell tableStart=sheet.findCell(tableName);
+            startRow=tableStart.getRow();
+            startCol=tableStart.getColumn();
+
+            Cell tableEnd= sheet.findCell(tableName, startCol+1,startRow+1, 100, 64000,  false);
+
+            endRow=tableEnd.getRow();
+            endCol=tableEnd.getColumn();
+            System.out.println("startRow="+startRow+", endRow="+endRow+", " + "startCol="+startCol+", endCol="+endCol);
+            tabArray=new String[endRow-startRow-1][endCol-startCol-1];
+            ci=0;
+
+            for (int i=startRow+1;i<endRow;i++,ci++){
+                cj=0;
+                for (int j=startCol+1;j<endCol;j++,cj++){
+                    tabArray[ci][cj]=sheet.getCell(j,i).getContents();
+                }
+            }
+        
+
+        return(tabArray);
+    }
+    
+    public void screenShot()
+    {
+    	File screenshot2 = ((TakesScreenshot)driver).
+        getScreenshotAs(OutputType.FILE);
+
+    try {
+    FileUtils.copyFile(screenshot2, new File("C:\\test\\"+i+".png"));
+    } catch (IOException e) {
+    // TODO Auto-generated catch block
+    e.printStackTrace();
+    }
+    i++;
+    }
+    
+    public static void waitForPageToLoad(WebDriver driver) {
+
+	    ExpectedCondition<Boolean> expectation = new ExpectedCondition<Boolean>() {
+	       @Override
+		public Boolean apply(WebDriver driver) {
+	         return ((JavascriptExecutor)driver).executeScript("return document.readyState").equals("complete");
+	       }
+	     };
+
+	    Wait<WebDriver> wait = new WebDriverWait(driver,20);
+	     try {
+	             wait.until(expectation);
+	     } catch(Throwable error) {
+	            // assertFalse("Timeout waiting for Page Load Request to complete.",true);
+	     }
+	}
+        
+
+}//end of class
+
+
+
+
+

@@ -1,0 +1,12 @@
+java -Dwebdriver.chrome.driver=C:\WINDOWS\system32\chromedriver.exe -jar selenium-server-standalone-2.24.1.jar -role webdriver -hub http://220.226.203.21:4444/grid/register -port 5555 -browser browserName=chrome
+
+
+hub command: java -jar selenium-server-standalone-2.24.1.jar -role hub
+node command: java -jar selenium-server-standalone-2.24.1.jar -role webdriver -hub http://localhost:4444/grid/register -port 5556 -browser browserName=firefox
+node for chrome: 
+java -Dwebdriver.chrome.driver=C:\WINDOWS\system32\chromedriver.exe -jar selenium-server-standalone-2.24.1.jar -role webdriver -hub http://220.226.206.25:4444/grid/register -port 5555 -browser browserName=chrome
+http://localhost:4444/grid/console 
+java -jar selenium-server-standalone-2.24.1.jar -role webdriver -hub http://220.226.206.:4444/grid/register -port 5556 -browser browserName=firefox
+
+
+java -Dwebdriver.chrome.driver=C:\WINDOWS\system32\chromedriver.exe -jar selenium-server-standalone-2.24.1.jar -role webdriver -hub http://220.226.206.27:4444/grid/register -port 5555 -browser browserName=chrome

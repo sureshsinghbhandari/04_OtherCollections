@@ -1,0 +1,38 @@
+How can we achieve parameterization in TestNG?
+
+WHat API is used to drive the data from Excel?
+
+WHat are the build management tools frequently used for Selenium?
+
+
+How do you declare global environmental variables in Framework?
+
+
+What are the main components go in Maven POM.xml file?
+
+Explain Page object Mechanisim?
+
+
+How can i get screenshot on every test failure?
+
+
+What are the reports used for framework developement?
+
+How did you implement logging in the framework?
+
+
+What are the groups? And importance of it in TestngXML File?
+
+
+Lets assume we have 100 tests. How will you trigger all the tests on single click?
+
+
+Explain scheduling the job in jenkins?
+
+
+Write the down code for taking screenshot with selenium webdriver?
+
+
+
+
+

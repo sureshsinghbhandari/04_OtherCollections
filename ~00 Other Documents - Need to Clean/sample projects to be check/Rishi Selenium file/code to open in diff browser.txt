@@ -1,0 +1,22 @@
+  File ffpath = new File("C:\\Users\\jiten.adhikari\\AppData\\Local\\Mozilla Firefox\\firefox.exe");
+	  FirefoxBinary ffbinary = new FirefoxBinary(ffpath);
+	  FirefoxProfile ffprofile = new FirefoxProfile();
+	  driver = new FirefoxDriver(ffbinary,ffprofile);
+    baseUrl = "https://www.bankofamerica.com";
+    driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
+  }
+
+
+ System.setProperty("webdriver.chrome.driver", "C:\\Users\\jiten.adhikari\\Desktop\\Selenium\\Drivers and Plugin\\chromedriver.exe");
+	  driver = new ChromeDriver();
+	  driver.manage().window().maximize();
+
+
+//File file = new File("C:/Users/jiten.adhikari/Desktop/Selenium/Drivers and Plugin/IEDriverServer.exe");
+	  //System.setProperty("webdriver.ie.driver", file.getAbsolutePath());
+	  //driver = new InternetExplorerDriver();
+	  
+	  //System.setProperty("webdriver.ie.driver", "C:\\Users\\jiten.adhikari\\Desktop\\Selenium\\Drivers and Plugin\\IEDriverServer.exe");
+	 // DesiredCapabilities capabilities = new DesiredCapabilities();
+	  //capabilities.setCapability("ignoreProtectedModeSettings", true);
+	  //driver = new InternetExplorerDriver(capabilities);

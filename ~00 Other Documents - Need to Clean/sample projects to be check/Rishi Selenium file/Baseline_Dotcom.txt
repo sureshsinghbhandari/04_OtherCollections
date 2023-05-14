@@ -1,0 +1,644 @@
+package sel2;
+
+
+import com.thoughtworks.selenium.*;
+import org.testng.annotations.*;
+import static org.testng.Assert.*;
+import java.util.regex.Pattern;
+
+import org.apache.commons.io.FileUtils;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.remote.Augmenter;
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.TakesScreenshot;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebDriverBackedSelenium;
+import java.io.File;
+import java.io.IOException;
+
+import jxl.*; 
+import java.io.*;
+
+
+@SuppressWarnings("deprecation")
+public class Baseline_Dotcom extends SeleneseTestCase{
+	private static WebDriver driver;
+	int i = 1;
+    @BeforeClass
+   
+public void setUp() throws Exception {
+    	
+    	//Starting code block of AutoIT call
+        //Runtime rt=Runtime.getRuntime();	
+        //rt.exec("C:\\Program Files\\AutoIt3\\Examples\\NBKIE.exe");
+        //rt.exec("C:\\Program Files\\AutoIt3\\Examples\\NBKFF.exe");	 
+        //Ending code block of AutoIT call
+        
+        //Function Call to open the URL in the specified browser
+        	driver = new FirefoxDriver();
+    		String baseUrl = "";
+    		selenium = new WebDriverBackedSelenium(driver, baseUrl);
+       
+        //Function calls to maximize and keep the focus on the browser
+        selenium.windowMaximize();
+        selenium.windowFocus();
+    	
+    	//Function call to create the result file
+    	qspCreateLogFile();
+    		 	
+    	selenium.setTimeout("600000");
+    	selenium.open("/");
+    	//selenium.open("");
+    	selenium.waitForPageToLoad("90000");
+    	Thread.sleep(1000);
+    			
+	}
+
+    
+    @DataProvider(name = "DP1")
+    
+public Object[][] createData1() throws Exception{
+		
+    	Object[][] retObjArr=getTableArray("D:\\Selenium2 regression\\Selenium 2\\DataProvider_baseline.xls","Baseline_Dotcom_Personal","RegressionTestData1");
+		return(retObjArr);				   
+    }
+    
+    @Test (dataProvider = "DP1")
+   
+public void testRegression(String property, String xPath, String xPath1, String value, String comparisonText, String permission, String name, String applicable, String script) throws Exception{
+	
+	if(script!=null)
+		System.out.println(script);
+    
+	//Code to check the pagetitle	
+    
+    //Code to check the textboxes 
+	if(property.equals("textbox"))
+	{
+		if(applicable.equals("yes"))
+			qspWriteDesignStep("Step20: Text Box Verification is applicable");
+		if(selenium.isEditable(xPath)==true){
+			qspWritePassLog("The textbox \""+name+"\" is enabled");
+			selenium.type(xPath, value);
+		}
+		else
+			qspWriteFailLog("The textbox \""+name+"\" is disabled");
+	}
+
+	//Code to test the checkboxes
+	if(property.equals("checkbox"))
+		{
+			if(applicable.equals("yes"))
+				qspWriteDesignStep("Step18: Checkbox Verification is applicable");
+			//assertEquals(value,selenium.getValue(xPath));
+			selenium.click(xPath);
+			assertEquals(value,selenium.getValue(xPath));	
+			String cValue = new String();
+			cValue = selenium.getValue(xPath);
+
+
+			if(cValue.equals("on"))
+				qspWritePassLog("The state of checkbox \"" +name+ "\" is "+cValue);
+			else
+				qspWriteFailLog("The state of checkbox \"" +name+ "\" is "+cValue);
+		}
+	
+		/////////////////////////////////////////////////
+		
+	//Code to check and uncheck check boxes and validate their visibility	
+	if(property.equals("checkbox1"))
+		{
+			if(applicable.equals("yes"))
+				qspWriteDesignStep("Step24: Check box Verification is applicable");
+			//assertEquals(value,selenium.getValue(xPath));
+			selenium.click(xPath);
+			assertEquals(value,selenium.getValue(xPath));	
+			String cValue = new String();
+			cValue = selenium.getValue(xPath);
+
+
+			if(cValue.equals("off"))
+				qspWritePassLog("The state of checkbox \"" +name+ "\" is "+cValue);
+			else
+				qspWriteFailLog("The state of checkbox \"" +name+ "\" is "+cValue);
+		}
+		
+		
+		
+		/////////////////////////////////////////////
+	
+	//Code to validate radio buttons
+	//Code to validate radio buttons
+	if(property.equals("radio"))
+		{
+			if(applicable.equals("yes"))
+				qspWriteDesignStep("Step16: Radio Button Verification is applicable");
+			selenium.click(xPath);
+			assertEquals(value,selenium.getValue(xPath));	
+			String cValue1 = new String();
+			cValue1 = selenium.getValue(xPath);
+
+			if(cValue1.equals("on"))
+				qspWritePassLog("The radio button \""+name+"\" is clicked and the state of Radio button is "+cValue1);
+			else
+				qspWriteFailLog("The state of Radio \""+name+"\" is "+cValue1);
+		}
+		
+	//Code to validate dropdown list boxes
+	if(property.equals("dropdown"))
+		{
+			if(applicable.equals("yes"))
+				qspWriteDesignStep("Step22: Drop Down Verification is applicable");
+			String[] dropdownoutput=selenium.getSelectOptions(xPath);
+			for (int i=1; i<dropdownoutput.length; i++)
+			{
+			System.out.println("The dropdown list contains the following list:  "+dropdownoutput[i]);
+			}
+			selenium.select(xPath, value);
+		}
+	
+	//Menu is for All mouse over main options 
+	if(property.equals("menu"))
+	{
+		selenium.click(xPath);
+		Thread.sleep(2000);
+		selenium.windowFocus();
+		screenCaptureFF();
+		//Number x, y;
+		//y= selenium.getElementPositionTop(xPath1);
+		//System.out.println("Top index:" + y);
+		//x= selenium.getElementPositionLeft(xPath1);
+		//System.out.println("Left Index:" + x);
+		selenium.click(xPath1);
+		selenium.waitForPageToLoad("90000");
+		Thread.sleep(2000);
+		selenium.windowFocus();
+		screenCaptureFF();
+		//selenium.open("");
+		//selenium.windowFocus();
+		
+	}
+	
+// Menu1 is for Help/Options as page load not needed
+	if(property.equals("menu1"))
+	{
+		selenium.click(xPath);
+		Thread.sleep(2000);
+		selenium.windowFocus();
+		screenCaptureFF();
+		//Number x, y;
+		//y= selenium.getElementPositionTop(xPath1);
+		//System.out.println("Top index:" + y);
+		//x= selenium.getElementPositionLeft(xPath1);
+		//System.out.println("Left Index:" + x);
+		selenium.click(xPath1);
+		selenium.waitForPageToLoad("60000");
+		Thread.sleep(2000);
+		selenium.windowFocus();
+		screenCaptureFF();		
+		}
+	
+	//Menu2 is to avoid taking screenshot for mouse over options repeatedly
+	if(property.equals("menu2"))
+	{
+		selenium.click(xPath);
+		Thread.sleep(2000);
+		selenium.windowFocus();
+		//Number x, y;
+		//y= selenium.getElementPositionTop(xPath1);
+		//System.out.println("Top index:" + y);
+		//x= selenium.getElementPositionLeft(xPath1);
+		//System.out.println("Left Index:" + x);
+		selenium.click(xPath1);
+		selenium.waitForPageToLoad("90000");
+		Thread.sleep(2000);
+		selenium.windowFocus();
+		screenCaptureFF();
+		//selenium.open("");
+		//selenium.windowFocus();
+				
+	}
+	
+	
+	if(property.equals("menu2_SPass"))
+	{
+		selenium.waitForPageToLoad("90000");
+		screenCaptureFF();
+		selenium.open("https://www.bankofamerica.com");
+		selenium.windowFocus();
+		selenium.click(xPath);
+		Thread.sleep(2000);
+		selenium.windowFocus();
+		//Number x, y;
+		//y= selenium.getElementPositionTop(xPath1);
+		//System.out.println("Top index:" + y);
+		//x= selenium.getElementPositionLeft(xPath1);
+		//System.out.println("Left Index:" + x);
+		selenium.click(xPath1);
+		selenium.waitForPageToLoad("90000");
+		Thread.sleep(2000);
+		selenium.windowFocus();
+		screenCaptureFF();						
+	}
+	
+	if(property.equals("link_tour"))
+	{
+		selenium.click(xPath);
+		selenium.waitForPopUp("preWin", "60000");
+		selenium.selectPopUp("preWin");
+		selenium.windowFocus();
+		screenCaptureFF();
+		selenium.close();
+		selenium.selectWindow(null);
+		selenium.windowFocus();
+	}
+	
+	// For setting more loading time for the Credit card page
+	if(property.equals("menu3"))
+	{
+		selenium.click(xPath);
+		Thread.sleep(2000);
+		selenium.windowFocus();
+		//Number x, y;
+		//y= selenium.getElementPositionTop(xPath1);
+		//System.out.println("Top index:" + y);
+		//x= selenium.getElementPositionLeft(xPath1);
+		//System.out.println("Left Index:" + x);
+		selenium.click(xPath1);
+		selenium.waitForPageToLoad("120000");
+		Thread.sleep(2000);
+		selenium.windowFocus();
+		screenCaptureFF();
+		}
+	
+	
+	
+	
+	//Function for Online Banking MouseOver feature
+	
+	if(property.equals("menux"))
+	{
+		//selenium.mouseOver(xPath);
+		selenium.click(xPath);
+		Thread.sleep(2000);
+		screenCaptureFF();
+		
+	}
+	//Function to navigate through SmallBusiness tab and taking SS on mouse hover
+	if(property.equals("menu_smallbus"))
+	{
+		selenium.click(xPath);
+		Thread.sleep(2000);
+		selenium.windowFocus();
+		screenCaptureFF();
+		//Number x, y;
+		//y= selenium.getElementPositionTop(xPath1);
+		//System.out.println("Top index:" + y);
+		//x= selenium.getElementPositionLeft(xPath1);
+		//System.out.println("Left Index:" + x);
+		selenium.click(xPath1);
+		selenium.waitForPageToLoad("90000");
+		Thread.sleep(2000);
+		selenium.windowFocus();
+		screenCaptureFF();
+	}
+	
+	//Function to navigate through SmallBusiness tab but avoid taking SS on mouse hover
+	if(property.equals("menu_smallbus1"))
+	{
+		selenium.click(xPath);
+		Thread.sleep(2000);
+		selenium.windowFocus();
+		screenCaptureFF();
+		//Number x, y;
+		//y= selenium.getElementPositionTop(xPath1);
+		//System.out.println("Top index:" + y);
+		//x= selenium.getElementPositionLeft(xPath1);
+		//System.out.println("Left Index:" + x);
+		selenium.click(xPath1);
+		selenium.waitForPageToLoad("90000");
+		Thread.sleep(2000);
+		selenium.windowFocus();
+		screenCaptureFF();
+		}
+	
+	/*if(property.equals("menu_Invest"))
+	{
+		selenium.click(xPath);
+		Thread.sleep(5000);
+		selenium.windowFocus();
+		screenCaptureFF();
+		Number x, y;
+		y= selenium.getElementPositionTop(xPath1);
+		System.out.println("Top index:" + y);
+		x= selenium.getElementPositionLeft(xPath1);
+		System.out.println("Left Index:" + x);
+		selenium.clickAt(xPath1,"x,y");
+		selenium.waitForPageToLoad("90000");
+		Thread.sleep(5000);
+		selenium.windowFocus();
+		screenCaptureFF();		
+		selenium.open("");
+		selenium.windowFocus();
+	}*/
+	
+	/*if(property.equals("menu2_Invest"))
+	{
+		selenium.click(xPath);
+		Thread.sleep(5000);
+		selenium.windowFocus();
+		Number x, y;
+		y= selenium.getElementPositionTop(xPath1);
+		System.out.println("Top index:" + y);
+		x= selenium.getElementPositionLeft(xPath1);
+		System.out.println("Left Index:" + x);
+		selenium.clickAt(xPath1,"x,y");
+		selenium.waitForPageToLoad("90000");
+		Thread.sleep(5000);
+		selenium.windowFocus();
+		screenCaptureFF();
+		selenium.open("");
+		selenium.windowFocus();
+	}*/
+	
+	if(property.equals("Open_homepage"))
+		
+	{
+			selenium.open("");
+			selenium.waitForPageToLoad("90000");
+			//selenium.selectWindow(null);
+			//selenium.windowFocus();
+			screenCaptureFF();
+	}	
+		
+		/////////////
+	
+	//Code to validate the elements present in the list
+	
+	if(property.equals("dropdown2"))
+		{
+			selenium.click(xPath);
+			screenCaptureFF();
+			selenium.select(xPath, value);
+
+		}
+		
+	//Code to validate text area	
+	
+	//Code to validate images present in a page
+	
+	//Code to validate and navigate using links
+	if(property.equals("link"))
+			
+		{
+			if(permission.equals("click"))
+			{
+				selenium.click(xPath);
+				selenium.waitForPageToLoad("120000");
+				Thread.sleep(2000);
+				screenCaptureFF();
+			}
+			if(permission.equals("titletag"))
+			{
+				if(applicable.equals("yes"))
+					qspWriteDesignStep("Step7: Title tag for links is applicable");
+				String getElementTitle=selenium.getAttribute(xPath);
+
+				if (getElementTitle.equals(comparisonText))
+				{
+					
+					qspWritePassLog("Title tag for link \""+name+ "\" is displaying as: "+ comparisonText);
+					
+				}
+					else 
+				{
+					qspWriteFailLog("Title tag for \""+name+"\" link is not being displayed properly");
+				
+				}
+			}
+		}	
+	
+	//Code to validate in page targeted links
+	
+	if(property.equals("link1"))
+		
+	{
+		if(permission.equals("click"))
+		{
+			selenium.click(xPath);
+			selenium.waitForPageToLoad("90000");
+			Thread.sleep(2000);
+			//screenCaptureFF();
+		}
+	}	
+	if(property.equals("link2"))
+				
+			{
+				if(permission.equals("click"))
+				{
+					selenium.click(xPath);
+					selenium.windowFocus();
+					selenium.waitForPageToLoad("90000");
+					Thread.sleep(2000);
+					screenCaptureFF();
+					selenium.open("");
+					selenium.windowFocus();
+				}
+			}
+	// Code for Show/Hide and Toggle Icon with out SS
+	if(property.equals("show/hide"))
+		
+	{
+		if(permission.equals("click"))
+		{
+			selenium.click(xPath);
+		}
+	}
+	// Code for Show/Hide and Toggle Icon with SS
+	if(property.equals("show/hide1"))
+		
+	{
+		if(permission.equals("click"))
+		{
+			selenium.click(xPath);
+			Thread.sleep(2000);
+			screenCaptureFF();
+			//screenCaptureOB();
+		}
+	}
+	/*if(property.equals("popup"))
+		
+	{
+		if(permission.equals("click"))
+		{
+			int i;
+			String s[],  popupid;
+			selenium.click(xPath);
+			//for (i=0;i<10; i++)
+			Thread.sleep(10000);
+			for(i=0;i<=10;i++)
+				{
+				s[i]= selenium.getAllWindowTitles();
+			System.out.println(s[i]);
+				}
+			//selenium.waitForPageToLoad("60000");
+			popupid = selenium.getEval("{var windowId; for(var x in selenium.openedWindows ) {windowId=x;}}"); 
+			System.out.println("WindowID" + popupid);
+			//selenium.selectPopUp("preWin"); 
+			//selenium.waitForPopUp("popupid","90000");
+			//selenium.selectWindow("@bc8e1e");
+			screenCaptureFF();
+			selenium.close();
+			//selenium.windowFocus();
+			//selenium.selectWindow("null");
+			//screenCaptureOB();		
+		}
+	}	*/
+				
+	
+	
+	//Code to test headers of the page	
+	//Code to test footers of the page
+	//Code to validate print options
+	if(property.equals("linkprint"))
+		{
+			if(permission.equals("click"))
+			{
+				selenium.click(xPath);
+				selenium.waitForPopUp("printwindow_", "60000");
+				selenium.selectWindow("name=printwindow_");
+				if(selenium.getTitle().equals(comparisonText)){
+					qspWritePassLog(comparisonText+" Pop window is displaying");
+				}
+				else 
+				{
+					qspWriteFailLog(comparisonText+"Pop window is not Displaying");
+				}
+				selenium.close();
+				selenium.selectWindow("null");
+			}
+    
+		}
+	}	
+    
+	//Code to validate text in the page
+	
+	//Function definition to end the test and free up the memory
+    @AfterClass
+    public void tearDown() throws Exception{
+    	qspCompleteLogFile();
+        selenium.close();
+        selenium.stop();
+    } 
+    
+    //Function definition to fetch the data from excel sheet and provide it to the create data function
+    public String[][] getTableArray(String xlFilePath, String sheetName, String tableName) throws Exception{
+        String[][] tabArray=null;
+        
+            Workbook workbook = Workbook.getWorkbook(new File(xlFilePath));
+            Sheet sheet = workbook.getSheet(sheetName); 
+            int startRow,startCol, endRow, endCol,ci,cj;
+            Cell tableStart=sheet.findCell(tableName);
+            startRow=tableStart.getRow();
+            startCol=tableStart.getColumn();
+
+            Cell tableEnd= sheet.findCell(tableName, startCol+1,startRow+1, 100, 64000,  false);                
+
+            endRow=tableEnd.getRow();
+            endCol=tableEnd.getColumn();
+            System.out.println("startRow="+startRow+", endRow="+endRow+", " + "startCol="+startCol+", endCol="+endCol);
+            tabArray=new String[endRow-startRow-1][endCol-startCol-1];
+            ci=0;
+
+            for (int i=startRow+1;i<endRow;i++,ci++){
+                cj=0;
+                for (int j=startCol+1;j<endCol;j++,cj++){
+                    tabArray[ci][cj]=sheet.getCell(j,i).getContents();
+                }
+            }
+        
+
+        return(tabArray);
+    }
+    
+    //Function Definition for capturing screenshot in Firefox browsers
+    public void screenCaptureFF()
+	{
+	WebDriver augmentedDriver = new Augmenter().augment(driver);	
+	 File screenshot = ((TakesScreenshot)augmentedDriver).
+     getScreenshotAs(OutputType.FILE);
+     try {
+          FileUtils.copyFile(screenshot, new File("D:\\Selenium2 regression\\Selenium 2\\test-output\\Screenshot\\screenshot"+i+".png"));
+         } catch (IOException e) {
+                                  //TODO Auto-generated catch block
+                                  e.printStackTrace();
+                                 }
+    	 i++;
+    	 if (screenshot!=null)
+    	 {
+    		 System.out.println("Screenshot "+i+" taken");
+    	 }
+    	 else System.out.println("Screenshot not taken");
+    }
+    
+    public void screenCapture() throws Exception{
+    	String screenName = new String();
+    	screenName = "D:\\Regression\\DataDrivenRegression\\Screenshot\\screenshot"+i+".png";
+    	selenium.windowFocus();
+    	selenium.captureScreenshot(screenName);
+    }
+    
+    //Function definition to create the result file
+    public void qspCreateLogFile() throws Exception{        
+
+    	BufferedWriter b = new BufferedWriter(new FileWriter("D:\\Selenium2 regression\\Selenium 2\\test-output\\"+"Dotcom_B"+".htm"));
+    	b.write("<html><head><title>"+"Dotcom Baseline Report"+"</title></head>");   
+    	b.write("<body><table border='1'><tr bgcolor='#A2B5CD'><td>Currently Executing:</td><td>"+"Dotcom_Baseline"+"</td></tr></table>");      
+    	b.write("<table border='1'><tr bgcolor='#A2B5CD'><td><b>Description</b></td><td><b>Result</b></td></tr>");
+    	b.close();
+
+    }
+    
+    //Function definition to write the heading in the result file
+    public void qspWriteHeading(String desc) throws Exception{
+
+    	BufferedWriter b = new BufferedWriter(new FileWriter("D:\\Selenium2 regression\\Selenium 2\\test-output\\"+"Dotcom_B"+".htm",true));
+    	b.write("<tr bgcolor='#AFEEEE'><td><b>Page: "+desc+"</b></td></tr>");
+    	b.close();
+    }
+    
+    //Function definition to write the design steps in the result file
+    public void qspWriteDesignStep(String desc) throws Exception{
+
+    	BufferedWriter b = new BufferedWriter(new FileWriter("D:\\Selenium2 regression\\Selenium 2\\test-output\\"+"Dotcom_B"+".htm",true));
+    	b.write("<tr bgcolor='#E0EEEE'><td><b>"+desc+"</b></td></tr>");
+    	b.close();
+    }
+
+    //Function definition to write the pass results in the result file
+    public void qspWritePassLog(String desc) throws Exception{
+
+    	BufferedWriter b = new BufferedWriter(new FileWriter("D:\\Selenium2 regression\\Selenium 2\\test-output\\"+"Dotcom_B"+".htm",true));
+    	b.write("<tr><td>"+desc+"</td><td bgcolor='#00FF00'>PASS</td></tr>");
+    	b.close();
+    }
+
+    //Function definition to write the fail results in the result file
+    public void qspWriteFailLog(String desc) throws Exception{
+    	BufferedWriter b = new BufferedWriter(new FileWriter("D:\\Selenium2 regression\\Selenium 2\\test-output\\"+"Dotcom_B"+".htm",true));
+    	b.write("<tr><td>"+desc+"</td><td bgcolor='#FF0000'>Fail</td></tr>");
+    	b.close();
+    }   
+    
+    //Function definition to complete the result file
+    public void qspCompleteLogFile() throws Exception{
+    	BufferedWriter b = new BufferedWriter(new FileWriter("D:\\Selenium2 regression\\Selenium 2\\test-output\\"+"Dotcom_B"+".htm",true));
+    	b.write("</html>");
+    	b.close();
+    }
+}//end of class
+
+
+
+

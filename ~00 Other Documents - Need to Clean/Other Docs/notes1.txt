@@ -1,0 +1,275 @@
+'''' Compare the count of values in FlyFrom and FlyTo
+
+x=window("Flight Reservation").WinComboBox("Fly From:").GetItemsCount
+y=window("Flight Reservation").WinComboBox("Fly To:").GetItemsCount
+If x=y Then
+	msgbox "Count is same"
+ else
+   msgbox "Count is not same"
+End If
+=-====================
+'' Script to Open a Record in Flight App
+with window("Flight Reservation")
+           .WinMenu("Menu").Select "File;Open Order..."
+           with   .Dialog("Open Order")
+		            .WinCheckBox("Order No.").Set "ON"
+                    .WinEdit("Edit").Set "2"
+                   .WinButton("OK").Click
+		   End With
+End With
+====================================
+' Login script for yahoo
+'Systemutil.Run "www.yahoomail.com"
+'With Browser("yahoo").Page("yahoo")
+'	.WebEdit("login").Set "mindqtest"
+'	.WebEdit("passwd").Set "mindqtest"
+'	.WebButton("Sign In").Click
+'End With
+Systemutil.Run "C:\Program Files\HP\QuickTest Professional\samples\flight\app\flight4a.exe"       
+=======================================================================
+''''''''' example to compare ename in window w1 and window w2
+x="ravi"
+window("w1").winedit("ename").Set x
+Window("w1").WinButton("search").Click
+y=window("w2").winEdit("ename").GetVisibleText
+If x=y Then
+	msgbox "Ename is same"
+ else
+   msgbox "Ename is not same"
+End If
+============================================================
+'systemutil.Run "f:\b1.bmp"
+'invokeapplication "C:\WINDOWS\system32\mspaint.exe  f:\b1.bmp"
+
+'Systemutil.Run "www.yahoomail.com"
+'invokeapplication "C:\Program Files\Internet Explorer\IEXPLORE.EXE www.yahoomail.com"
+================================================================
+
+
+Dim a,b
+a=inputbox("Enter a number")
+b=inputbox("Enter a number")
+msgbox cint(a)+cint(b)
+msgbox a-b
+msgbox a*b
+msgbox a/b
+msgbox a mod b
+msgbox a^b
+
+'fname="raj"
+'lname="kiran"
+'msgbox fname+lname
+================================================================
+'Swap 2 numbers
+Dim a,b
+a=5
+b=10
+
+c=a
+a=b
+b=c
+msgbox "The values are   "&a&"      "&b
+================================================
+If condition Then
+
+End If
+''''''''''''''''''''''''''''''''''''
+If condition Then
+
+else
+
+End If
+''''''''''''''''''''''''''''''''''''''''''
+If condition Then
+
+else if condition then
+
+else if condition then
+
+else
+
+End if
+End if
+End If
+====================================================
+'Display Even or odd
+
+Dim n
+n=inputbox("Enter a number")
+If n mod 2=0 Then
+	msgbox "It is even"
+ else
+    msgbox "It is Odd"
+End If
+============================================
+'Accept year and display leap year or not
+Dim n
+n=inputbox("Enter a year in yyyy format")
+If n mod 4=0 Then
+	msgbox "It is Leap year"
+ else
+    msgbox "Not leap year"
+End If
+=================================================
+Dim a,b,c
+a=inputbox("Enter a number")
+b=inputbox("Enter a number")
+c=inputbox("Enter a number")
+If a>b and a>c Then
+	msgbox "A is biggest"
+ else if b>a and b>c Then
+     msgbox "B is biggest"
+  else
+     msgbox "C is biggest"
+End If
+End If
+================================================
+''''Accept 3 numbers and display the smalles
+
+===============================================
+
+Systemutil.Run "C:\Program Files\HP\QuickTest Professional\samples\flight\app\flight4a.exe"
+Dialog("Login").WinEdit("Agent Name:").Set "abcd"
+Dialog("Login").WinEdit("Password:").Set "mercrry"
+Dialog("Login").WinButton("OK").Click
+If window("Flight Reservation").Exist Then
+	Reporter.ReportEvent 0,"Login","Login is success"
+ else
+    Dialog("Login").CaptureBitmap "f1.bmp"
+    Reporter.ReportEvent 1,"Login","Login is not success","f1.bmp"
+End If
+
+'' To write the pass / fail message in the results window
+''Reporter.ReportEvent status,stepname,description,bitmapfile
+  ''                                      0----- pass
+   ''		  1----fail
+''		  2-----done
+''		  3----- warning
+========================================================
+Dim str
+str=lcase(inputbox("Enter a char"))
+Select Case str
+Case "a","e","i","o","u"
+	msgbox "It is vowel"
+Case else
+	  msgbox "It is not vowel"
+End Select
+
+lcase------ to convert to lowercase
+ucase----- to conver to uppercase
+==========================================================
+Loop statements :  To execute the script for multiple iterations
+
+While condition   '  will execute if the condition is satisfied
+
+Wend
+'''''''''''''''''''''''''''''''''''''
+Do                                   '' will execute and then check the condition
+
+Loop  while condition
+'''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+Do                     '''''''' will execute until the condition is satisfied; if the condition is satisfied it will stop
+	
+
+Loop  until condition
+'''''''''''''''''''''''''''''''''''''''''''''''''''''
+For var=value1 to value2 step value
+
+Next
+'''''''''''''''''''''''''''''''''''''''''''''''
+For each var in collection
+
+Next
+''''''''''''''''''''''''''''''''
+====================================================
+Dim i
+i=1
+While i<=10
+	print i
+	i=i+2
+Wend
+=======================
+Dim i
+i=1
+do
+	print i
+	i=i+2
+loop while i<=10
+======================
+Dim i
+i=1
+do
+	print i
+	i=i+1
+loop until i>10
+========================
+For i=1 to 10 step 2
+	print i
+Next
+===============================
+n=window("FR").WinComboBox("Fly From:").GetItemsCount
+For i=0 to n-1
+   s=window("FR").WinComboBox("Fly From:").GetItem(i)
+   print s
+Next
+==========================================================
+'''http://content.icicidirect.com/market/dailyshareprices.asp?exchange=BSE&startname=A
+
+n=Browser("icici").Page("icici").WebTable("data").RowCount
+For i=2 to n
+  s=Browser("icici").Page("icici").WebTable("data").GetCellData(i,1)
+   If trim(s)="ABB" Then
+	   For j=1 to 8
+		 c=Browser("icici").Page("icici").WebTable("data").GetCellData(1,j)
+          v=Browser("icici").Page("icici").WebTable("data").GetCellData(i,j)
+		  print c&"   :    "&v
+	   Next
+	   Exit for
+   End If
+Next
+==================================================================
+''' Array    : To store multiple values
+''''' dim        --- to declare constatnt size
+'''' ReDim   -    to declare the size as dynamic
+''''' preserve  --- to retain the old data and redefine the size
+
+ReDim x(3)
+x(0)=10
+x(1)="abcd"
+x(2)=10.8976
+x(3)="10-10-2009"
+
+ReDim preserve x(5)
+x(4)=100
+x(5)=200
+
+For i=0 to ubound(x)
+	print x(i)
+Next
+
+''' ubound -------- get the upper boundary of array
+'''' lbound------- get lower boundary of array
+============================================
+For i=1 to 5
+	s=""
+	For j=1 to i
+          s=s&"  "&j
+	Next
+	print s
+Next
+===============================================
+Dim a,b,c
+a=1
+b=1
+c=a+b
+print a
+print b
+While c<100
+    print c
+	a=b
+	b=c
+	c=a+b
+Wend
+=============================================
+
+
